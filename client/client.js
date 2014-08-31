@@ -20,6 +20,14 @@ Template.map.helpers({
     return Map.findOne() && Map.findOne().tiles;
   },
 
+  tiles2d: function() {
+    arr = [];
+    for (var i = 0; i < MAP_SIZE; i++) {
+      arr[i] = Tile2.find({i: i});
+    }
+    return arr;
+  },
+
 //    getColor: function () {
 //      return ({null: '-', red: 'r'})[this && this.color]
 //    },
@@ -29,6 +37,12 @@ Template.map.helpers({
 //      var color = user && user.profile.playerId;
     if (this.playerId == -1) return 'F5F5F5';
     return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][this.playerId] || '000';
+  },
+
+  getColor2: function() {
+    var id = this.tile.playerId;
+    if (id == -1) return 'F5F5F5';
+    return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][id] || '000';
   }
 });
 Template.map.rendered = function() {

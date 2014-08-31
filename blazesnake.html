@@ -20,18 +20,28 @@
 </template>
 
 <template name="map">
+  <!--<table class="map">-->
+  <!--{{#each tiles}}-->
+  <!--<tr>-->
+  <!--{{length}}-->
+  <!--{{#each row}}-->
+  <!--<td style="background-color: #{{getColor}}">-->
+  <!--&lt;!&ndash;{{getColor}}&ndash;&gt;-->
+  <!--</td>-->
+  <!--{{/each}}-->
+  <!--</tr>-->
+  <!--{{/each}}-->
+
+  <!--</table>-->
+
   <table class="map">
-    {{#each tiles}}
+    {{#each tiles2d}}
     <tr>
-      {{length}}
-      {{#each row}}
-      <td style="background-color: #{{getColor}}">
-        <!--{{getColor}}-->
-      </td>
+      {{#each this}}
+      <td style="background-color: #{{getColor2}}"></td>
       {{/each}}
     </tr>
     {{/each}}
-
   </table>
 </template>
 
