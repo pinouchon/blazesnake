@@ -1,0 +1,46 @@
+<head>
+  <title>blazesnake</title>
+</head>
+
+<body>
+<h1>Welcome to Blazesnake</h1>
+
+<!--{{> hello}}-->
+
+
+{{> loginButtons}}
+
+{{> resetButton}}
+
+{{> map}}
+</body>
+
+<template name="resetButton">
+  <a class="reset">Reset</a>
+</template>
+
+<template name="map">
+  <table class="map">
+    {{#each tiles}}
+    <tr>
+      {{length}}
+      {{#each row}}
+      <td style="background-color: #{{getColor}}">
+        <!--{{getColor}}-->
+      </td>
+      {{/each}}
+    </tr>
+    {{/each}}
+
+  </table>
+</template>
+
+
+<!--<template name="tile">-->
+<!--{{tile}}-->
+<!--</template>-->
+
+<!--<template name="hello">-->
+<!--<button>Click Me</button>-->
+<!--<p>You've pressed the button {{counter}} times.</p>-->
+<!--</template>-->

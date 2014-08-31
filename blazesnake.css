@@ -1,0 +1,10 @@
+/* CSS declarations go here */
+
+.map {
+    background-color: #CCC;
+}
+.map td {
+    background-color: #F5F5F5;
+    width: 12px;
+    height: 12px;
+}
