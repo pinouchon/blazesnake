@@ -26,7 +26,7 @@ function Player(options) {
 
 Meteor.methods({
   reset: function () {
-    console.log('reset');
+    //console.log('reset');
     // map
     var tiles = Map.findOne().tiles;
     for (var i = 0; i < MAP_SIZE; i++) {
@@ -42,12 +42,20 @@ Meteor.methods({
       tiles[0].row[u.profile.playerId] = new Tile({playerId: u.profile.playerId});
     });
     Map.update({}, {tiles: tiles});
+  },
+  keyEvent: function (which) {
+    //console.log('keyevent', which, this.userId);
+    var positions = {37: [0, -1], 38: [-1, 0], 39: [0, 1], 40: [1, 0]};
+    Meteor.users.update(
+      {_id: this.userId},
+      {$set: {'profile.direction': positions[which]}}
+    );
   }
 });
 
 Meteor.users.find({"status.online": true}).observe({
   added: function (user) {
-    console.log('online', user._id);
+    //console.log('online', user._id);
 
     var i = 0;
     while (Meteor.users.find({
@@ -56,7 +64,7 @@ Meteor.users.find({"status.online": true}).observe({
       'status.online': true}).count() != 0) {
       i++;
     }
-    console.log('assigning', i);
+    //console.log('assigning', i);
 
     Meteor.users.update({_id: user._id}, {$set: {profile: new Player({playerId: i})}});
     var tiles = Map.findOne().tiles;
@@ -64,7 +72,7 @@ Meteor.users.find({"status.online": true}).observe({
     Map.update({}, {tiles: tiles});
   },
   removed: function (user) {
-    console.log('offline');
+    //console.log('offline');
     Meteor.users.update({_id: user._id}, {$set: {'profile.playerId': null}});
     var tiles = Map.findOne().tiles;
     tiles[0].row[user.profile.playerId] = new Tile();
@@ -73,8 +81,8 @@ Meteor.users.find({"status.online": true}).observe({
 });
 
 var initMap = function () {
-  console.log('initMap');
-  console.log('count', Map.find().count());
+  //console.log('initMap');
+  //console.log('count', Map.find().count());
   if (Map.find().count() == 0) {
     var tiles = [];
 
@@ -95,7 +103,7 @@ Meteor.startup(function () {
 
   var step = 0;
   var tick = function () {
-    console.log('tick', step);
+    //console.log('tick', step);
 
     var tiles = Map.findOne().tiles;
     for (var i = 0; i < MAP_SIZE; i++) {
@@ -112,18 +120,18 @@ Meteor.startup(function () {
       }
     }
     Meteor.users.find({'status.online': true}).forEach(function (u) {
-      console.log('updating', u.username, u.profile.direction, u.profile.position, u.profile.playerId);
-      var newY = u.profile.position[0] + u.profile.direction[0];
-      var newX = u.profile.position[1] + u.profile.direction[1];
+      //console.log('updating', u.username, u.profile.direction, u.profile.position, u.profile.playerId);
+      var newY = u.profile.position[0] + 1*u.profile.direction[0];
+      var newX = u.profile.position[1] + 1*u.profile.direction[1];
       if (newY < 0 || newY >= MAP_SIZE ||
         newX < 0 || newX >= MAP_SIZE) {
-        console.log('out of bounds', newY, newX);
+        //console.log('out of bounds', newY, newX);
         return;
         newY = Math.round(options.playerId / MAP_SIZE);
         newX = options.playerId % MAP_SIZE;
       }
       Meteor.users.update({_id: u._id}, {$set: {'profile.position': [newY, newX]}});
-      console.log('updating tile', [newY, newX], 'with', u.profile.playerId);
+      //console.log('updating tile', [newY, newX], 'with', u.profile.playerId);
       tiles[newY].row[newX] = new Tile({playerId: u.profile.playerId});
 
     });
@@ -132,6 +140,6 @@ Meteor.startup(function () {
     step++;
   };
 
-  Meteor.setInterval(tick, 500);
+  Meteor.setInterval(tick, 1000);
   // code to run on server at startup
 });

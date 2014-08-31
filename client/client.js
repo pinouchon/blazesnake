@@ -31,9 +31,16 @@ Template.map.helpers({
     return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][this.playerId] || '000';
   }
 });
+Template.map.rendered = function() {
+  $('body').on('keydown',function(e) {
+    //e.preventDefault();
+    Meteor.call('keyEvent', e.which);
+  });
+
+};
 
 Template.resetButton.events({
-  'click .reset': function(e) {
+  'click .reset': function (e) {
     e.preventDefault();
     Meteor.call('reset');
   }
