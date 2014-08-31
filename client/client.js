@@ -1,53 +1,22 @@
 Accounts.ui.config({ passwordSignupFields: 'USERNAME_ONLY' });
 
-// counter starts at 0
-Session.setDefault("counter", 0);
-
-//  Template.hello.helpers({
-//    counter: function () {
-//      return Session.get("counter");
-//    }
-//  });
-
-//  Template.hello.events({
-//    'click button': function () {
-//      // increment the counter when button is clicked
-//      Session.set("counter", Session.get("counter") + 1);
-//    }
-//  });
 Template.map.helpers({
-  tiles: function () {
-    return Map.findOne() && Map.findOne().tiles;
-  },
-
   tiles2d: function() {
-    arr = [];
+    var arr = [];
     for (var i = 0; i < MAP_SIZE; i++) {
-      arr[i] = Tile2.find({i: i});
+      arr[i] = Tile.collection.find({i: i}, {sort: {j: 1}});
     }
     return arr;
   },
 
-//    getColor: function () {
-//      return ({null: '-', red: 'r'})[this && this.color]
-//    },
-  getColor: function () {
-//      var user = this.userId && Meteor.users.findOne({_id: this.userId});
-//      console.log('user...', user, this.userId);
-//      var color = user && user.profile.playerId;
-    if (this.playerId == -1) return 'F5F5F5';
-    return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][this.playerId] || '000';
-  },
-
-  getColor2: function() {
-    var id = this.tile.playerId;
+  getColor: function() {
+    var id = this.playerId;
     if (id == -1) return 'F5F5F5';
     return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][id] || '000';
   }
 });
 Template.map.rendered = function() {
   $('body').on('keydown',function(e) {
-    //e.preventDefault();
     Meteor.call('keyEvent', e.which);
   });
 
