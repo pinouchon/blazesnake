@@ -9,11 +9,11 @@ Meteor.methods({
   reset: function () {
     if (this.userId != 'xvw5cxBHpNaesoFRj') return;
     console.log('reset');
-//    for (var x = 0; x < MAP_SIZE; x++) {
-//      for (var y = 0; y < MAP_SIZE; y++) {
-//        Tile.collection.upsert({x: x, y: y}, {x: x, y: y});
-//      }
-//    }
+    for (var x = 0; x < MAP_SIZE; x++) {
+      for (var y = 0; y < MAP_SIZE; y++) {
+        Tile.collection.upsert({x: x, y: y}, {x: x, y: y});
+      }
+    }
     Tile.collection.update({}, {$set: new Tile(-1, 0)}, {multi: true});
     User.collection.find().forEach(function (user) {
       Tile.collection.update({x: 0, y: user.userId},
