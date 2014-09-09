@@ -1,30 +1,38 @@
-Accounts.ui.config({ passwordSignupFields: 'USERNAME_ONLY' });
+Accounts.ui.config({passwordSignupFields: 'USERNAME_ONLY'});
 
 Template.map.helpers({
-  tiles2d: function() {
-    var arr = [];
+  tiles2d: function () {
+    var tiles2d = [];
     for (var i = 0; i < MAP_SIZE; i++) {
-      arr[i] = Tile.collection.find({i: i}, {sort: {j: 1}});
+      tiles2d[i] = Tile.collection.find({x: i},
+        {sort: {x: 1, y: 1}});
     }
-    return arr;
-  },
-
-  getColor: function() {
-    var id = this.playerId;
-    if (id == -1) return 'F5F5F5';
-    return ['F00', '0F0', '00F', 'FF0', '0FF', 'F0F', '700', '070', '007', '770', '707', '777'][id] || '000';
+    return tiles2d;
   }
 });
-Template.map.rendered = function() {
-  $('body').on('keydown',function(e) {
-    Meteor.call('keyEvent', e.which);
-  });
 
+Template.map.events({
+  'click .reset': function() {
+    Meteor.call('reset');
+  }
+});
+
+UI.registerHelper('getColor', function () {
+  if (this.userId == -1) return 'F5F5F5';
+  return ['F00', '0F0', '00B', 'FF0', 'F81', '070',
+    '616', 'F2F', '0EE', '990',
+    '177', '55F', '522'][this.userId] || '000';
+});
+
+Template.map.rendered = function () {
+  $('body').on('keydown', function (e) {
+    Meteor.call('keyDown', e.which);
+  });
 };
 
-Template.resetButton.events({
-  'click .reset': function (e) {
-    e.preventDefault();
-    Meteor.call('reset');
+Template.scores.helpers({
+  users: function() {
+    return User.collection.find({'status.online': true},
+      {sort: {score: -1}});
   }
 });
